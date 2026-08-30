@@ -12,57 +12,106 @@ export default function Navbar() {
     navigate('/login')
   }
 
+  const navLinkClass =
+    'flex items-center gap-1.5 rounded-lg px-3 py-2 text-slate-600 transition hover:bg-slate-100 hover:text-emerald-700'
+
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
-      <Link to="/" className="flex items-center gap-3">
-  <span className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-600 text-white">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5">
-      <path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11z" strokeLinejoin="round" />
-      <circle cx="12" cy="10" r="2.5" />
-    </svg>
-  </span>
-  <span>
-    <b className="block text-slate-900">CivicConnect</b>
-    <small className="text-slate-500">Citizen Complaint Portal</small>
-  </span>
-</Link>
-        <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
-          <Link to="/complaints" className="text-slate-600 hover:text-emerald-700">Public Complaints</Link>
-          {token && ['citizen', 'user'].includes(user?.role) && <Link to="/dashboard" className="text-slate-600 hover:text-emerald-700">My Complaints</Link>}
-          {token && user?.role === 'officer' && <Link to="/officer" className="text-slate-600 hover:text-emerald-700">Officer Dashboard</Link>}
-          {token && user?.role === 'admin' && <Link to="/admin" className="text-slate-600 hover:text-emerald-700">Admin</Link>}
-        </nav>
-        <div className="flex items-center gap-2 text-sm">
-          {token ? <>
-            <Link
-  to="/profile"
-  className="flex items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-slate-100"
->
-  {user?.profilePicture ? (
-    <img
-      src={`${
-        import.meta.env.VITE_API_BASE_URL?.replace('/api', '') ||
-        'http://localhost:5000'
-      }${user.profilePicture}`}
-      alt={user.name}
-      className="h-9 w-9 rounded-full object-cover"
-    />
-  ) : (
-    <span className="grid h-9 w-9 place-items-center rounded-full bg-emerald-100 font-bold text-emerald-700">
-      {user?.name?.charAt(0)?.toUpperCase()}
-    </span>
-  )}
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-5 py-3.5">
 
-  <span className="hidden text-slate-600 sm:inline">
-    {user?.name?.split(' ')[0]}
-  </span>
-</Link>
-            <button onClick={handleLogout} className="rounded-lg border border-slate-300 px-3 py-2 font-semibold text-slate-700 hover:bg-slate-50">Log out</button>
-          </> : <>
-            <Link to="/login" className="rounded-lg px-3 py-2 font-semibold text-slate-700">Log in</Link>
-            <Link to="/register" className="rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white hover:bg-emerald-700">Report an issue</Link>
-          </>}
+        {/* Logo */}
+        <Link to="/" className="flex shrink-0 items-center gap-2.5">
+          <span className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-600 text-white">
+            <i className="ri-map-pin-line text-xl leading-none" />
+          </span>
+          <span className="hidden sm:block">
+            <b className="block leading-tight text-slate-900">CivicConnect</b>
+            <small className="text-xs leading-tight text-slate-500">Citizen Complaint Portal</small>
+          </span>
+        </Link>
+
+        {/* Navigation */}
+        <nav className="hidden items-center gap-1 text-sm font-medium md:flex">
+          <Link to="/complaints" className={navLinkClass}>
+            <i className="ri-file-list-3-line text-base leading-none" />
+            <span>Public Complaints</span>
+          </Link>
+
+          {token && ['citizen', 'user'].includes(user?.role) && (
+            <Link to="/dashboard" className={navLinkClass}>
+              <i className="ri-dashboard-line text-base leading-none" />
+              <span>My Complaints</span>
+            </Link>
+          )}
+
+          {token && user?.role === 'officer' && (
+            <Link to="/officer" className={navLinkClass}>
+              <i className="ri-government-line text-base leading-none" />
+              <span>Officer Dashboard</span>
+            </Link>
+          )}
+
+          {token && user?.role === 'admin' && (
+            <Link to="/admin" className={navLinkClass}>
+              <i className="ri-admin-line text-base leading-none" />
+              <span>Admin</span>
+            </Link>
+          )}
+        </nav>
+
+        {/* Right side */}
+        <div className="flex shrink-0 items-center gap-2 text-sm">
+          {token ? (
+            <>
+              <Link
+                to="/profile"
+                className="flex items-center gap-2 rounded-lg py-1.5 pl-1.5 pr-3 transition hover:bg-slate-100"
+              >
+                {user?.profilePicture ? (
+                  <img
+                    src={`${
+                      import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://localhost:5000'
+                    }${user.profilePicture}`}
+                    alt={user.name}
+                    className="h-8 w-8 rounded-full object-cover"
+                  />
+                ) : (
+                  <span className="grid h-8 w-8 place-items-center rounded-full bg-emerald-100 text-emerald-700">
+                    <i className="ri-user-line text-base leading-none" />
+                  </span>
+                )}
+                <span className="hidden text-slate-700 sm:inline">{user?.name?.split(' ')[0]}</span>
+              </Link>
+
+              <span className="hidden h-6 w-px bg-slate-200 sm:block" />
+
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-1.5 rounded-lg px-3 py-2 font-semibold text-slate-600 transition hover:bg-slate-100"
+              >
+                <i className="ri-logout-box-r-line text-base leading-none" />
+                <span className="hidden sm:inline">Log out</span>
+              </button>
+            </>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="flex items-center gap-1.5 rounded-lg px-3 py-2 font-semibold text-slate-600 transition hover:bg-slate-100"
+              >
+                <i className="ri-login-box-line text-base leading-none" />
+                <span>Log in</span>
+              </Link>
+
+              <Link
+                to="/register"
+                className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white transition hover:bg-emerald-700"
+              >
+                <i className="ri-add-circle-line text-base leading-none" />
+                <span>Report an issue</span>
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>
