@@ -1,86 +1,322 @@
-# Hackathon Full-Stack App
+ # CivicConnect
 
-React + Redux Toolkit frontend, Express + MongoDB/Mongoose backend, JWT auth,
-a protected Dashboard, and a full CRUD example — wired together end to end
-(no mock backend, this talks to a real MongoDB).
+### Citizen Complaint & Civic Issue Reporting Portal
 
-## Stack
-**Client:** React 18, Vite, Redux Toolkit, React Router v6, Tailwind CSS,
-Axios, react-toastify
-**Server:** Node, Express, Mongoose, JWT (jsonwebtoken), bcryptjs, cors
+CivicConnect is a full-stack web platform that connects citizens with local authorities through a transparent digital complaint management system.
 
-## Project structure
+Citizens can report problems such as broken roads, garbage accumulation, water-supply issues, and electricity problems. They can track the progress of their complaints, browse public complaints, and upvote existing issues.
+
+Government officers can review, prioritize, update, and resolve complaints from a dedicated dashboard.
+
+---
+
+## 🚀 Features
+
+### 👤 Citizen
+
+* Create an account and log in securely
+* Submit civic complaints
+* Select complaint category
+* Add title, description, and area/locality
+* View personal complaint history
+* Track complaint status
+* View officer remarks
+* Browse public complaints
+* Search and filter complaints
+* Upvote existing complaints
+* Prevent duplicate upvotes
+* Receive duplicate complaint warnings
+* View complaint priority
+* Submit feedback after resolution
+* Rate complaint resolution from 1 to 5 stars
+* Add optional feedback comments
+* Manage profile information
+* Upload a profile picture
+
+### 👮 Officer
+
+* Secure officer authentication
+* Officer dashboard
+* View all citizen complaints
+* Search complaints by keyword
+* Filter by category
+* Filter by area
+* Filter by status
+* Filter by priority
+* View complaint details
+* Update complaint status
+* Add officer remarks
+* Resolve complaints
+* View citizen feedback
+* Monitor satisfaction results
+* Automatically identify high-priority complaints
+
+---
+
+## 📊 Complaint Status
+
+Complaints move through a simple workflow:
+
+```text
+Pending
+   ↓
+In Progress
+   ↓
+Resolved
 ```
+
+Officers can update the complaint status and add remarks to keep citizens informed.
+
+---
+
+## ⭐ Priority Scoring
+
+CivicConnect automatically calculates complaint priority using:
+
+```text
+Priority Score = Upvotes × Days Since Created
+```
+
+| Score | Priority |
+| ----: | -------- |
+|   0–4 | Low      |
+|  5–15 | Medium   |
+| 16–30 | High     |
+|   30+ | Critical |
+
+For example:
+
+A complaint that is 10 days old with 20 upvotes:
+
+```text
+20 × 10 = 200
+```
+
+The complaint is therefore classified as:
+
+```text
+Critical
+```
+
+Priority is calculated dynamically when complaints are fetched, so no scheduled job is required.
+
+---
+
+## 🔍 Duplicate Complaint Detection
+
+Before creating a new complaint, CivicConnect checks for existing complaints with the same:
+
+* Category
+* Area/locality
+* Active status
+
+If a similar complaint already exists, the citizen can be encouraged to upvote the existing complaint instead of creating a duplicate report.
+
+This helps authorities identify how many citizens are affected by the same issue.
+
+---
+
+## 👍 Upvoting
+
+Citizens can support existing complaints by upvoting them.
+
+Each citizen can upvote a complaint only once.
+
+This prevents duplicate votes and helps officers identify issues affecting larger numbers of people.
+
+---
+
+## ⭐ Citizen Feedback
+
+When an officer marks a complaint as resolved, the complaint becomes eligible for feedback.
+
+The citizen can provide:
+
+* 1–5 star rating
+* Optional comment
+
+Officers can use the collected feedback to understand citizen satisfaction.
+
+---
+
+## 🔐 Authentication & Security
+
+CivicConnect uses:
+
+* JWT authentication
+* bcrypt password hashing
+* Role-based authorization
+* Protected API routes
+* Citizen-specific complaint access
+* Officer-only complaint management
+* Duplicate upvote prevention
+* Backend validation
+
+Passwords are never stored as plain text.
+
+The citizen ID for complaints is obtained from the verified JWT instead of being trusted from frontend input.
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+* React.js
+* Vite
+* Redux Toolkit
+* React Router
+* Tailwind CSS
+* Axios
+
+### Backend
+
+* Node.js
+* Express.js
+* MongoDB
+* Mongoose
+* JWT
+* bcrypt
+* Multer
+
+### Development
+
+* Git
+* GitHub
+* VS Code
+* MongoDB
+
+---
+
+## 📁 Project Structure
+
+```text
 hackathon-fullstack/
-  client/     React app (Vite)
-  server/     Express API + MongoDB/Mongoose
+│
+├── client/
+│   ├── src/
+│   │   ├── app/
+│   │   ├── components/
+│   │   ├── features/
+│   │   ├── pages/
+│   │   ├── routes/
+│   │   └── utils/
+│   │
+│   ├── public/
+│   ├── package.json
+│   └── vite.config.js
+│
+├── server/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── scripts/
+│   ├── uploads/
+│   ├── package.json
+│   └── server.js
+│
+├── .gitignore
+└── README.md
 ```
 
-## Getting started
+---
 
-### 1. Backend
+## ⚙️ Installation
+
+### 1. Clone the repository
+
 ```bash
-cd server
-npm install
-cp .env.example .env
+git clone https://github.com/abdulghaffar9/hakathon-2026.git
 ```
-Edit `.env`:
-- `MONGO_URI` — a local MongoDB (`mongodb://127.0.0.1:27017/hackathon`) or an
-  Atlas connection string
-- `JWT_SECRET` — any long random string
+
+### 2. Enter the project
 
 ```bash
-npm run dev
+cd hakathon-2026
 ```
-Runs on http://localhost:5000. Check http://localhost:5000/api/health.
 
-### 2. Frontend
-In a second terminal:
+---
+
+## 📦 Install Frontend Dependencies
+
 ```bash
 cd client
 npm install
-cp .env.example .env   # VITE_API_BASE_URL defaults to http://localhost:5000/api
+```
+
+---
+
+## 📦 Install Backend Dependencies
+
+Open another terminal:
+
+```bash
+cd server
+npm install
+```
+
+---
+
+## 🔑 Environment Variables
+
+Create a `.env` file inside the `server` folder.
+
+Example:
+
+```env
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+CLIENT_ORIGIN=http://localhost:5173
+```
+
+### Environment Variables
+
+| Variable        | Description                    |
+| --------------- | ------------------------------ |
+| `PORT`          | Backend server port            |
+| `MONGO_URI`     | MongoDB connection string      |
+| `JWT_SECRET`    | Secret used to sign JWT tokens |
+| `CLIENT_ORIGIN` | Frontend URL                   |
+
+Never commit your `.env` file to GitHub.
+
+---
+
+## ▶️ Running the Application
+
+### Start the backend
+
+```bash
+cd server
 npm run dev
 ```
-Runs on http://localhost:5173.
 
-## What's included
-**Server**
-- `models/User.js` — schema with bcrypt password hashing (`pre('save')` hook)
-  and a `comparePassword` method
-- `models/Item.js` — example CRUD resource, scoped to its owning user
-- `controllers/authController.js` — register/login, issues JWTs
-- `controllers/itemController.js` — full CRUD, always scoped to `req.user._id`
-- `middleware/authMiddleware.js` — verifies the `Authorization: Bearer <token>`
-  header and attaches `req.user`
-- `middleware/errorMiddleware.js` — centralized 404 + error handling
-- `config/db.js` — Mongoose connection
+The backend will run on:
 
-**Client**
-- `features/auth/authSlice.js` — register/login via `createAsyncThunk`,
-  persists `{ user, token }` to localStorage
-- `features/items/itemsSlice.js` — fetch/create/update/delete thunks for the
-  CRUD example — copy this pattern for your real hackathon resource
-- `utils/axiosInstance.js` — attaches the JWT to every request, clears storage
-  on a 401
-- `routes/ProtectedRoute.jsx` / `PublicOnlyRoute.jsx` — route guards
-- `pages/` — Home, Register, Login, Dashboard, NotFound
-- `components/` — Navbar, FormInput, Loader
+```text
+http://localhost:5000
+```
 
-## Swapping the CRUD resource for your real one
-1. Duplicate `server/models/Item.js`, `controllers/itemController.js`, and
-   `routes/itemRoutes.js` for your real resource (rename `Item` → whatever
-   you're building — tasks, posts, submissions, etc.), then mount the new
-   route in `server.js`.
-2. On the client, duplicate `features/items/itemsSlice.js` the same way and
-   add the new reducer to `app/store.js`.
-3. Update `Dashboard.jsx` (or add a new page) to use the new slice.
+### Start the frontend
 
-Auth (register/login/protected routes) needs no changes — it's independent
-of whatever resource you build on top of it.
+Open another terminal:
 
-## Notes
-- Passwords are hashed with bcrypt before saving — never stored in plaintext.
-- JWTs expire after `JWT_EXPIRES_IN` (default 7 days, set in `server/.env`).
-- Items are scoped per-user: one user can never see or edit another's items.
-- Toasts are wired up globally via `<ToastContainer />` in `main.jsx`.
+```bash
+cd client
+npm run dev
+```
+
+The frontend will normally run on:
+
+```text
+http://localhost:5173
+```
+
+---
+
+## 👮 Creating an Officer Account
+
+For the
+
