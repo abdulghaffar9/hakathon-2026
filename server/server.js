@@ -20,14 +20,14 @@ const app = express()
 
 // Allow requests from your Railway frontend & local development environment
 app.use(cors({
-  origin: [
-    process.env.CLIENT_URL,
-    'https://insightful-truth-production-9b04.up.railway.app',
-    'http://localhost:5173',
-    'http://localhost:3000'
-  ].filter(Boolean),
-  credentials: true
-}))
+    origin: [
+      process.env.CLIENT_URL,
+      /\.vercel\.app$/, // Permits any Vercel preview deployment URL
+      'http://localhost:5173',
+      'http://localhost:3000'
+    ].filter(Boolean),
+    credentials: true
+  }));
 
 app.use(express.json({ limit: '1mb' }))
 
