@@ -25,7 +25,8 @@ const allowedOrigins = [
     'http://localhost:3000'
   ].filter(Boolean);
   
-  app.use('/api/auth', authRoutes);git 
+  app.use('/api/auth', authRoutes)
+  app.use('/api/auth', authRoutes);
   app.use(cors({
     origin: (origin, callback) => {
       // Allow requests with no origin (like mobile apps or curl requests)
