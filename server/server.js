@@ -19,13 +19,25 @@ await connectDB()
 const app = express()
 
 // Allow requests from your Railway frontend & local development environment
-app.use(cors({
-    origin: [
-      process.env.CLIENT_URL,
-      /\.vercel\.app$/, // Permits any Vercel preview deployment URL
-      'http://localhost:5173',
-      'http://localhost:3000'
-    ].filter(Boolean),
+const allowedOrigins = [
+    process.env.CLIENT_URL,
+    'http://localhost:5173',
+    'http://localhost:3000'
+  ].filter(Boolean);
+  
+  app.use(cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+  
+      const isAllowed = allowedOrigins.includes(origin) || /\.vercel\.app$/.test(origin);
+  
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true
   }));
 
