@@ -25,6 +25,7 @@ const allowedOrigins = [
     'http://localhost:3000'
   ].filter(Boolean);
   
+  app.use('/api/auth', authRoutes);git 
   app.use(cors({
     origin: (origin, callback) => {
       // Allow requests with no origin (like mobile apps or curl requests)
@@ -53,7 +54,7 @@ app.use('/api/complaints', complaintRoutes)
 
 app.use(notFound)
 app.use(errorHandler)
-app.use('/api/auth', authRoutes);
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, '0.0.0.0', () => {
